@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow — Elevate Your Productivity</title>
+  <meta name="description" content="A gorgeous, glassmorphism-styled full-stack task manager to organize and execute your daily workflows smoothly.">
+  
+  <!-- Google Fonts - Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-indigo">
+
+  <!-- Background decorative glowing orbs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="app-container">
+    <!-- Header with Stats Dashboard & Theme Switcher -->
+    <header class="app-header">
+      <div class="header-top-row">
+        <div class="logo-area">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+          <h1 id="app-title">TaskFlow</h1>
+        </div>
+        
+        <!-- Theme Accents Switcher -->
+        <div class="theme-switcher-container" aria-label="Accent Color Customization">
+          <button class="theme-dot dot-indigo active" data-theme="indigo" title="Indigo Accent"></button>
+          <button class="theme-dot dot-rose" data-theme="rose" title="Rose Accent"></button>
+          <button class="theme-dot dot-emerald" data-theme="emerald" title="Emerald Accent"></button>
+          <button class="theme-dot dot-amber" data-theme="amber" title="Amber Accent"></button>
+        </div>
+      </div>
+      
+      <!-- Stats Dashboard widget -->
+      <div id="stats-dashboard" class="stats-card">
+        <div class="stats-info">
+          <div class="stats-text">
+            <span class="stats-title">Progress</span>
+            <span id="stats-fraction" class="stats-fraction">0/0</span>
+          </div>
+          <span id="stats-percent" class="stats-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Advanced Task Input Form -->
+    <section class="input-section">
+      <form id="task-form" class="task-form-container">
+        <!-- Text Input Row -->
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="task-input" 
+            placeholder="What needs to be accomplished today?" 
+            required 
+            autocomplete="off" 
+            maxlength="100"
+          >
+          <label for="task-input" class="sr-only">New Task Input</label>
+        </div>
+        
+        <!-- Metadata Selectors Row -->
+        <div class="form-metadata-row">
+          <!-- Priority Selector -->
+          <div class="meta-field">
+            <label for="task-priority" class="meta-label">Priority</label>
+            <select id="task-priority" class="meta-select">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          
+          <!-- Category Selector -->
+          <div class="meta-field">
+            <label for="task-category" class="meta-label">Category</label>
+            <input 
+              type="text" 
+              id="task-category" 
+              class="meta-input" 
+              placeholder="e.g. Work, Personal"
+              maxlength="20"
+              autocomplete="off"
+            >
+          </div>
+          
+          <!-- Due Date Selector -->
+          <div class="meta-field">
+            <label for="task-due-date" class="meta-label">Due Date</label>
+            <input type="date" id="task-due-date" class="meta-input meta-date-input">
+          </div>
+        </div>
+
+        <button type="submit" id="add-task-btn" class="btn btn-add" aria-label="Add Task">
+          <span>Add Task</span>
+          <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- Navigation & Utility Controls Row -->
+    <div class="controls-dashboard-wrapper">
+      <nav class="filter-navigation" aria-label="Filter Tasks">
+        <button id="filter-all" class="filter-btn active" data-filter="all">All</button>
+        <button id="filter-pending" class="filter-btn" data-filter="pending">Pending</button>
+        <button id="filter-completed" class="filter-btn" data-filter="completed">Completed</button>
+      </nav>
+      
+      <!-- Search, Sort & Clear Controls Container -->
+      <div class="controls-row">
+        <!-- Search bar -->
+        <div class="search-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" id="search-input" placeholder="Search tasks..." autocomplete="off">
+          <label for="search-input" class="sr-only">Search Tasks</label>
+        </div>
+
+        <!-- Sort drop-down -->
+        <div class="sort-wrapper">
+          <label for="sort-select" class="sr-only">Sort Tasks</label>
+          <select id="sort-select" class="control-select">
+            <option value="created-desc">Newest First</option>
+            <option value="created-asc">Oldest First</option>
+            <option value="due-asc">Due Date</option>
+            <option value="priority-desc">Priority</option>
+          </select>
+        </div>
+
+        <!-- Clear completed tasks button -->
+        <button id="clear-completed-btn" class="btn btn-clear-completed" title="Clear Completed Tasks">
+          <svg class="clear-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          <span>Clear Completed</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tasks Main Area -->
+    <main class="tasks-container">
+      <!-- Loading Indicator -->
+      <div id="tasks-loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Syncing database...</p>
+      </div>
+
+      <!-- Empty State Graphic -->
+      <div id="empty-state" class="empty-state-container hidden">
+        <div class="empty-state-graphic">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3 class="empty-state-title">No tasks found</h3>
+        <p id="empty-state-message" class="empty-state-text">Your schedule is clean. Add a task above to get started!</p>
+      </div>
+
+      <!-- Dynamically Populated List -->
+      <ul id="task-list" class="task-list"></ul>
+    </main>
+  </div>
+
+  <!-- Edit Task Modal Overlay -->
+  <div id="edit-modal" class="modal-overlay hidden" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <h2 id="modal-title" class="modal-header">Edit Task</h2>
+      <form id="edit-form">
+        <!-- Title Input -->
+        <div class="input-wrapper modal-field">
+          <label for="edit-task-input" class="modal-field-label">Title</label>
+          <input 
+            type="text" 
+            id="edit-task-input" 
+            placeholder="Update task title..." 
+            required 
+            autocomplete="off" 
+            maxlength="100"
+          >
+        </div>
+
+        <!-- Edit Metadata Grid -->
+        <div class="modal-metadata-grid">
+          <div class="meta-field">
+            <label for="edit-task-priority" class="meta-label">Priority</label>
+            <select id="edit-task-priority" class="meta-select">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          
+          <div class="meta-field">
+            <label for="edit-task-category" class="meta-label">Category</label>
+            <input 
+              type="text" 
+              id="edit-task-category" 
+              class="meta-input" 
+              placeholder="e.g. Work, Personal"
+              maxlength="20"
+              autocomplete="off"
+            >
+          </div>
+          
+          <div class="meta-field">
+            <label for="edit-task-due-date" class="meta-label">Due Date</label>
+            <input type="date" id="edit-task-due-date" class="meta-input meta-date-input">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="modal-save-btn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Client JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
